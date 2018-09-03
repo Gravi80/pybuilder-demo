@@ -1,4 +1,4 @@
-from os import sys, path
+from os import listdir, sys, path
 
 from pybuilder.plugins.python.install_dependencies_plugin import install_dependency
 
@@ -12,6 +12,8 @@ use_plugin("python.core")
 use_plugin("python.install_dependencies")
 use_plugin('pypi:pybuilder_pytest')
 use_plugin('pypi:pybuilder_pytest_coverage')
+use_plugin("copy_resources")
+use_plugin("python.distutils")
 
 name = "pybuilder-demo"
 version = __version__
@@ -46,6 +48,31 @@ def configure_pytest(project, logger):
 @task
 @depends("install_build_dependencies")
 def run_unit_tests():
+    pass
+
+
+@before("package")
+def package_configs_file(project, logger):
+    logger.info("Copying non python source files i.e all config files")
+    project.set_property('include_package_data', True)
+    project.get_property("copy_resources_glob").append("default_conf/*")
+    project.set_property("copy_resources_target", "$dir_dist/pybuilder_demo")
+    project.package_data.update({'pybuilder_demo': ["default_conf/*"]})
+
+
+@task(description="Setup configs files default location")
+def package(project, logger):
+    logger.info("All configs will be copied to '<virtual_env>/etc' directory "
+                "during installation")
+    conf_source_directory = 'build/lib/pybuilder_demo/default_conf'
+    destination = "etc/configs"
+    config_files = map(lambda conf_file: "{0}/{1}".format(conf_source_directory, conf_file),
+                       listdir(project.expand_path('$dir_dist/pybuilder_demo/default_conf')))
+    project.files_to_install.extend([(destination, config_files)])
+
+
+@depends("install_runtime_dependencies")
+def publish():
     pass
 
 
