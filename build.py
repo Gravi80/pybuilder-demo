@@ -21,7 +21,7 @@ summary = "An example project for configuring pybuilder"
 description = """An example project for configuring pybuilder."""
 
 authors = [Author("Ravi Sharma", "ravi.sharma.cs11@gmail.com")]
-url = ""
+url = "https://github.com/imravishar/pybuilder-demo"
 license = "GPL License"
 default_task = ["clean"]
 
