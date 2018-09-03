@@ -1,0 +1,6 @@
+.idea
+target
+*.pyc
+*.DS_Store
+*.coverage
+.pytest_cache/

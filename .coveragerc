@@ -1,0 +1,13 @@
+# .coveragerc to control pytest coverage
+
+[run]
+branch = True
+omit =
+    *__init__*
+    */test/*
+
+[report]
+ignore_errors = True
+
+[html]
+directory = tests_coverage_report
